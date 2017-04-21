@@ -25,12 +25,14 @@
 </template>
 
 <script>
-  const voices = window.speechSynthesis.getVoices().filter(x => x.lang === 'en-US')
+  function getVoices () {
+    return window.speechSynthesis.getVoices().filter(x => x.lang === 'en-US')
+  }
 
   function playerSay (text) {
     return new Promise((resolve, reject) => {
       const u = new SpeechSynthesisUtterance(text)
-      u.voice = voices[0]
+      u.voice = getVoices()[0]
       speechSynthesis.speak(u)
       setTimeout(() => { resolve() }, 2500)
     })
@@ -48,7 +50,7 @@
       }
 
       const u = new SpeechSynthesisUtterance(text)
-      u.voice = voices[2]
+      u.voice = getVoices()[2]
       speechSynthesis.speak(u)
       setTimeout(() => { resolve() }, 1500)
     })
@@ -57,7 +59,7 @@
   function opponentSunk (which) {
     return new Promise((resolve, reject) => {
       const u = new SpeechSynthesisUtterance(`You've sunk my ${which}.`)
-      u.voice = voices[2]
+      u.voice = getVoices()[2]
       speechSynthesis.speak(u)
       setTimeout(() => { resolve() }, 5000)
     })
