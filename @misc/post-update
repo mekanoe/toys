@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+
+TMP_DIR=$(mktemp -d)
+
+# verbose helper
+cmd() {
+  echo "> $@"
+  "$@"
+}
+
+# Switch to stage dir
+cmd cd ~/toys.stage
+cmd env -i git pull
+
+# Move root files directly
+find . -maxdepth 1 -not -type d | xargs -I % cp % $TMP_DIR
+
+# Walk directories, build as we go
+TARGETS=$(find ./* -maxdepth 0 -type d)
+for target in $TARGETS; do
+  cmd cd $target
+  cmd yarn --only-lockfile
+  cmd npm run build
+  OUT=$(readlink -m $TMP_DIR/${target,,})
+  cmd mkdir -p $OUT
+  cmd mv dist/* $OUT
+  cmd cd ~/toys.stage
+done
+
+# Deploy it
+cmd cp -rT $TMP_DIR /srv/toys.kat.cafe
+
+rm -rf $TMP_DIR
