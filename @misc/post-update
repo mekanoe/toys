@@ -20,12 +20,16 @@ find . -maxdepth 1 -not -type d | xargs -I % cp % $TMP_DIR
 TARGETS=$(find ./* -maxdepth 0 -type d)
 for target in $TARGETS; do
   cmd cd $target
-  cmd yarn --only-lockfile
-  cmd npm run build
-  OUT=$(readlink -m $TMP_DIR/${target,,})
-  cmd mkdir -p $OUT
-  cmd mv dist/* $OUT
-  cmd cd ~/toys.stage
+  if [[-e package.json]]; then
+    cmd yarn --only-lockfile
+    cmd npm run build
+    OUT=$(readlink -m $TMP_DIR/${target,,})
+    cmd mkdir -p $OUT
+    cmd mv dist/* $OUT
+    cmd cd ~/toys.stage
+  else
+    echo "-- skipping $target"
+  fi
 done
 
 # Deploy it
