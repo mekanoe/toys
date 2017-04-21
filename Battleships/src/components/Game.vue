@@ -11,10 +11,13 @@
           </tr>
           <tr v-for="x in xCount">
             <th class="x-head" :class="(hoverX === ''+x) ? 'head-hover' : ''" :data-head="x">{{x}}</th>
-            <td class="cell" v-for="y in yCount" :data-cell="y+x" @mouseover="cellHover(y+x, $event)"></td>
+            <td class="cell" v-for="y in yCount" :data-cell="y+x" @click="cellClick(x, y)" @mouseover="cellHover(y+x, $event)"></td>
           </tr>
         </tbody>
       </table>
+
+      <p>This game isn't actually working, nothing interesting happens.</p>
+      <p>TTS vocal tests are on row 10</p>
 
     </div>
 
@@ -22,6 +25,44 @@
 </template>
 
 <script>
+  const voices = window.speechSynthesis.getVoices().filter(x => x.lang === 'en-US')
+
+  function playerSay (text) {
+    return new Promise((resolve, reject) => {
+      const u = new SpeechSynthesisUtterance(text)
+      u.voice = voices[0]
+      speechSynthesis.speak(u)
+      setTimeout(() => { resolve() }, 2500)
+    })
+  }
+
+  function opponentHitmiss (hitmiss) {
+    return new Promise((resolve, reject) => {
+      let text = 'Miss.'
+
+      console.log(hitmiss)
+
+      if (hitmiss % 2) {
+        console.log('it')
+        text = 'Hit.'
+      }
+
+      const u = new SpeechSynthesisUtterance(text)
+      u.voice = voices[2]
+      speechSynthesis.speak(u)
+      setTimeout(() => { resolve() }, 1500)
+    })
+  }
+
+  function opponentSunk (which) {
+    return new Promise((resolve, reject) => {
+      const u = new SpeechSynthesisUtterance(`You've sunk my ${which}.`)
+      u.voice = voices[2]
+      speechSynthesis.speak(u)
+      setTimeout(() => { resolve() }, 5000)
+    })
+  }
+
   export default {
     data () {
       return {
@@ -32,6 +73,31 @@
       }
     },
     methods: {
+      cellClick: async function (x, y) {
+        // Speech test
+        await playerSay(`${y}-${x}`)
+        await opponentHitmiss(Math.floor(Math.random() * 10))
+
+        if (x === 10) {
+          switch (y) {
+            case 'A':
+              await opponentSunk('Battleship')
+              break
+            case 'B':
+              await opponentSunk('PT Boat')
+              break
+            case 'C':
+              await opponentSunk('Carrier')
+              break
+            case 'D':
+              await opponentSunk('Submarine')
+              break
+            case 'E':
+              await opponentSunk('Destroyer')
+              break
+          }
+        }
+      },
       cellHover (cell) {
         this.hoverX = cell.slice(1)
         this.hoverY = cell[0]
