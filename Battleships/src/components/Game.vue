@@ -25,45 +25,14 @@
 </template>
 
 <script>
+  import tts, { ttsFactory } from '@/libs/tts'
+
   function getVoices () {
     return window.speechSynthesis.getVoices().filter(x => x.lang === 'en-US')
   }
 
-  function playerSay (text) {
-    return new Promise((resolve, reject) => {
-      const u = new SpeechSynthesisUtterance(text)
-      u.voice = getVoices()[0]
-      speechSynthesis.speak(u)
-      setTimeout(() => { resolve() }, 2500)
-    })
-  }
-
-  function opponentHitmiss (hitmiss) {
-    return new Promise((resolve, reject) => {
-      let text = 'Miss.'
-
-      console.log(hitmiss)
-
-      if (hitmiss % 2) {
-        console.log('it')
-        text = 'Hit.'
-      }
-
-      const u = new SpeechSynthesisUtterance(text)
-      u.voice = getVoices()[2]
-      speechSynthesis.speak(u)
-      setTimeout(() => { resolve() }, 1500)
-    })
-  }
-
-  function opponentSunk (which) {
-    return new Promise((resolve, reject) => {
-      const u = new SpeechSynthesisUtterance(`You've sunk my ${which}.`)
-      u.voice = getVoices()[2]
-      speechSynthesis.speak(u)
-      setTimeout(() => { resolve() }, 5000)
-    })
-  }
+  const playerTTS = ttsFactory(getVoices()[0])
+  const opponentTTS = ttsFactory(getVoices()[2])
 
   export default {
     data () {
@@ -76,27 +45,28 @@
     },
     methods: {
       cellClick: async function (x, y) {
-        // Speech test
-        await playerSay(`${y}-${x}`)
-        await opponentHitmiss(Math.floor(Math.random() * 10))
+        await playerTTS(tts.callout(`${y}-${x}`), { postDelay: 2000 })
 
-        if (x === 10) {
+        let result = tts.hit
+        if (Math.floor(Math.random() * 2) === 0) {
+          result = tts.miss
+        }
+
+        await opponentTTS(result, { postDelay: 1500 })
+
+        if (+x === 10) {
+          console.log('triggered tts test')
           switch (y) {
-            case 'A':
-              await opponentSunk('Battleship')
-              break
-            case 'B':
-              await opponentSunk('PT Boat')
-              break
-            case 'C':
-              await opponentSunk('Carrier')
-              break
-            case 'D':
-              await opponentSunk('Submarine')
-              break
-            case 'E':
-              await opponentSunk('Destroyer')
-              break
+            case 'A': opponentTTS(tts.sunk_carrier); break
+            case 'B': opponentTTS(tts.sunk_battleship); break
+            case 'C': opponentTTS(tts.sunk_pt_boat); break
+            case 'D': opponentTTS(tts.sunk_destroyer); break
+            case 'E': opponentTTS(tts.sunk_submarine); break
+            case 'F': playerTTS(tts.lost_carrier); break
+            case 'G': playerTTS(tts.lost_battleship); break
+            case 'H': playerTTS(tts.lost_pt_boat); break
+            case 'J': playerTTS(tts.lost_destroyer); break
+            case 'K': playerTTS(tts.lost_submarine); break
           }
         }
       },
