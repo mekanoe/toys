@@ -61,8 +61,8 @@ export function ttsFactory (voice) {
 
 export default {
   // Callout generic
-  callout (coords) {
-    return speak.bind(null, coords)
+  callout (x, y) {
+    return speak.bind(null, `${y}-${x}`)
   },
 
   // Hit/Miss

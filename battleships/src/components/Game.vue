@@ -50,7 +50,7 @@
     },
     methods: {
       cellClick: async function (x, y) {
-        await playerTTS(tts.callout(`${y}-${x}`), { postDelay: 2000 })
+        await playerTTS(tts.callout(x, y), { postDelay: 2000 })
 
         let result = tts.hit
         if (Math.floor(Math.random() * 2) === 0) {
