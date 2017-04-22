@@ -27,6 +27,9 @@ export function speak (text, voice, {preDelay, postDelay}) {
 }
 
 // Creates a pre-baked tts factory.
+// This intent of this is to return a function that'll always have the same voice.
+// You'd just call what this returns like PlayerVoice(tts.hit) (being an uncalled speak instance)
+// or with a string like PlayerVoice('Hit!')
 // -- Arguments
 // Object {
 //    voice     <SpeechSynthesisVoice> | The voice to use.
