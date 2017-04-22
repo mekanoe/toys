@@ -31,8 +31,13 @@
     return window.speechSynthesis.getVoices().filter(x => x.lang === 'en-US')
   }
 
-  const playerTTS = ttsFactory(getVoices()[0])
-  const opponentTTS = ttsFactory(getVoices()[2])
+  let playerTTS = ttsFactory(getVoices()[0])
+  let opponentTTS = ttsFactory(getVoices()[2])
+
+  speechSynthesis.onvoiceschanged = () => {
+    playerTTS = ttsFactory(getVoices()[0])
+    opponentTTS = ttsFactory(getVoices()[2])
+  }
 
   export default {
     data () {
