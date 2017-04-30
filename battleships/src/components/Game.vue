@@ -16,8 +16,15 @@
         </tbody>
       </table>
 
-      <p>This game isn't actually working, nothing interesting happens.</p>
-      <p>TTS vocal tests are on row 10</p>
+      <!-- DEBUG -->
+      <div class="debug" v-if="debug">
+        <select @change="debugStateEvent" v-model="game_state">
+          <option value="GAME_NOSTATE">GAME_NOSTATE</option>
+          <option value="GAME_PLACING">GAME_PLACING</option>
+          <option value="GAME_WAITING">GAME_WAITING</option>
+          <option value="GAME_PLAYING">GAME_PLAYING</option>
+        </select>
+      </div>
 
     </div>
 
@@ -26,6 +33,7 @@
 
 <script>
   import tts, { ttsFactory } from '@/libs/tts'
+  import Game from '@/libs/game'
 
   function getVoices () {
     return window.speechSynthesis.getVoices().filter(x => x.lang === 'en-US')
@@ -39,17 +47,48 @@
     opponentTTS = ttsFactory(getVoices()[2])
   }
 
+  const GAME_NOSTATE = 'GAME_NOSTATE'
+  const GAME_PLACING = 'GAME_PLACING'
+  const GAME_WAITING = 'GAME_WAITING'
+  const GAME_PLAYING = 'GAME_PLAYING'
+
+  const GAME_AI_DEBUG = 'GAME_AI_DEBUG'
+
+  const game = new Game()
+  window.$game = game
+
   export default {
     data () {
       return {
-        xCount: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        yCount: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K'],
+        xCount: game.xAxis,
+        yCount: game.yAxis,
         hoverX: '',
-        hoverY: ''
+        hoverY: '',
+
+        map: game.playerMap,
+
+        game_state: GAME_PLACING,
+
+        debug: process.env.NODE_ENV === 'development'
       }
     },
     methods: {
       cellClick: async function (x, y) {
+        switch (this.game_state) {
+          case GAME_NOSTATE:
+            this.ttsTest(x, y)
+            break
+          case GAME_PLACING:
+            this.place(x, y)
+            break
+          case GAME_PLAYING:
+            this.play(x, y)
+            break
+          case GAME_WAITING:
+            break
+        }
+      },
+      ttsTest: async function (x, y) {
         await playerTTS(tts.callout(x, y), { postDelay: 2000 })
 
         let result = tts.hit
@@ -83,6 +122,33 @@
       removeHover () {
         this.hoverX = ''
         this.hoverY = ''
+      },
+
+      debugStateEvent () {},
+      debugDispatch ({action, data = null}) {
+        if (process.env !== 'development') {
+          return
+        }
+
+        switch (action) {
+
+          case 'tts':
+            this.ttsTest(data.x, data.y)
+            break
+
+          case 'state':
+            this.game_state = data
+            break
+
+          case 'show-opponent':
+            this.toggleAIDebug(GAME_AI_DEBUG)
+            break
+
+          case 'skip':
+            this.skipTurn()
+            break
+
+        }
       }
     }
   }
