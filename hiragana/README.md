@@ -1,12 +1,16 @@
-# hiragana
+# Toy Project: Hiragana
 
-> A Vue.js project
+https://toys.kat.cafe/hiragana
+
+This project is to help myself and my Japanese study group learn Hiragana and eventually Katakana and so on.
 
 ## Build Setup
 
 ``` bash
 # install dependencies
 npm install
+# OR
+yarn install
 
 # serve with hot reload at localhost:8080
 npm run dev
