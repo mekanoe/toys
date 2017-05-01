@@ -22,8 +22,10 @@ export default {
   justify-content: center
   flex-wrap: column
   height: 100vh
+  max-width: 100vw
 
 
 body
   overflow: hidden
+  margin: 0
 </style>
