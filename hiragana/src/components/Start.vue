@@ -3,7 +3,7 @@
     <h1>
       ひらがなゲーム
     </h1>
-      <router-link :to="{name: 'GameSetup'}" class="button button-start item">
+      <router-link :to="{name: 'GamePlay'}" class="button button-start item">
         <span class="en">Start Game</span>
         <span class="jp">ゲームをスタート</span>
       </router-link>

@@ -43,14 +43,14 @@
 
         allChars: [
           {kana: 'え', romaji: 'e'},
-          // {kana: 'い', romaji: 'i'},
-          // {kana: 'け', romaji: 'ke'},
-          // {kana: 'あ', romaji: 'a'},
-          // {kana: 'う', romaji: 'u'},
-          // {kana: 'き', romaji: 'ki'},
-          // {kana: 'こ', romaji: 'ko'},
-          // {kana: 'お', romaji: 'o'},
-          // {kana: 'か', romaji: 'ka'},
+          {kana: 'い', romaji: 'i'},
+          {kana: 'け', romaji: 'ke'},
+          {kana: 'あ', romaji: 'a'},
+          {kana: 'う', romaji: 'u'},
+          {kana: 'き', romaji: 'ki'},
+          {kana: 'こ', romaji: 'ko'},
+          {kana: 'お', romaji: 'o'},
+          {kana: 'か', romaji: 'ka'},
           {kana: 'く', romaji: 'ku'}
         ],
 
@@ -79,12 +79,13 @@
 
     methods: {
       checkInput () {
-        if (this.input === this.activeChar.romaji) {
+        const input = this.input.toLowerCase()
+        if (input === this.activeChar.romaji) {
           this.triggerChange()
           return
         }
 
-        if (this.allChars.filter(x => x.romaji === this.input).length !== 0) {
+        if (this.allChars.filter(x => x.romaji === input).length !== 0) {
           this.activeTries -= 1
           this.scoreChange({ type: 'wrong_match' })
           if (this.activeTries === 0) {
