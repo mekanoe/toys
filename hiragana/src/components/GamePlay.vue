@@ -1,15 +1,15 @@
 <template>
 <div>
-  <div class="score">Score: {{humanScore}} / 100</div>
+  <div class="score" ref="score">Score: {{humanScore}} / 100</div>
   <transition name="fade">
-    <div class="char">
+    <div class="char" ref="char" key="activeChar">
       {{activeChar.kana}}
     </div>
   </transition>
   <div>
     <input type="text" autofocus="true" ref="input" :class="`v-${visualState}`" @blur="giveFocus" :disabled="freeze" v-model="input">
   </div>
-  <div class="button" @mousedown="giveUp">I don't know</div>
+  <div class="button" ref="idk" @mousedown="giveUp">I don't know</div>
   <div class="gameOver" :class="(gameOver) ? 'gameOver-visible' : ''">
     <div class="content">
       <h2>Game Over!</h2>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+  import dictionary from '@/dictionary'
+
   export default {
     data () {
       return {
@@ -41,24 +43,13 @@
         visualState: 'normal',
         freeze: false,
 
-        allChars: [
-          {kana: 'え', romaji: 'e'},
-          {kana: 'い', romaji: 'i'},
-          {kana: 'け', romaji: 'ke'},
-          {kana: 'あ', romaji: 'a'},
-          {kana: 'う', romaji: 'u'},
-          {kana: 'き', romaji: 'ki'},
-          {kana: 'こ', romaji: 'ko'},
-          {kana: 'お', romaji: 'o'},
-          {kana: 'か', romaji: 'ka'},
-          {kana: 'く', romaji: 'ku'}
-        ],
+        allChars: dictionary.hiragana,
 
         availableChars: [],
 
         activeChar: {
           kana: '',
-          romaji: ''
+          romaji: ['']
         },
         activeTries: 3
       }
@@ -75,17 +66,21 @@
       console.log('%c~~ AVAILABLE CHARS ~~\n', 'font-weight: bold; color: pink', this.availableChars.map(x => x.kana).join(' '))
       this.initScore()
       this.next()
+
+      window.onfocus = () => {
+        this.giveFocus()
+      }
     },
 
     methods: {
       checkInput () {
         const input = this.input.toLowerCase()
-        if (input === this.activeChar.romaji) {
+        if (this.activeChar.romaji.indexOf(input) !== -1) {
           this.triggerChange()
           return
         }
 
-        if (this.allChars.filter(x => x.romaji === input).length !== 0) {
+        if (input !== 'n' && this.allChars.filter(x => x.romaji.indexOf(input) !== -1).length !== 0) {
           this.activeTries -= 1
           this.scoreChange({ type: 'wrong_match' })
           if (this.activeTries === 0) {
@@ -240,7 +235,6 @@
 
       p.button-item
         margin-top: 2.5em
-
 
   .fade-enter-active, .fade-leave-active
     transition: opacity .5s

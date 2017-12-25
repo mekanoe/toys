@@ -3,15 +3,16 @@
     <h1>
       ひらがなゲーム
     </h1>
-      <router-link :to="{name: 'GamePlay'}" class="button button-start item">
+    <h4>hiragana game</h4>
+      <router-link :to="{name: 'GameSetup'}" class="button button-start item">
         <span class="en">Start Game</span>
         <span class="jp">ゲームをスタート</span>
       </router-link>
 
-      <router-link :to="{name: 'HowToPlay'}" class="button button-htp item">
+      <!-- <router-link :to="{name: 'HowToPlay'}" class="button button-htp item">
         <span class="en">How to Play</span>
         <span class="jp">ゲームのプレイ方法</span>
-      </router-link>
+      </router-link> -->
   </div>
 </template>
 
@@ -22,7 +23,6 @@
 </script>
 
 <style lang="sass" scoped>
-  #start
 
   .item
     display: block
@@ -55,17 +55,21 @@
 
     &:hover
       box-shadow: 0 0 8px #2a1b22 - #111
-      transform: scale(1.05, 1.05)
+      transform: scale(1.005, 1.005)
 
       .en
         opacity: 0
       .jp
         opacity: 1
 
-  h1
+  h1, h4
     font-size: 2.5em
-    margin: 1em
+    margin: 0
     text-shadow:  0 0 4px #2a1b22 - #111
+
+  h4
+    font-size: 1em
+    margin: 1em
 
 
 </style>

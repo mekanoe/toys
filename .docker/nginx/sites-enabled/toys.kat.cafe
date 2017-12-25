@@ -1,0 +1,9 @@
+server {
+  listen [::]:80 deferred;
+  listen 80 deferred;
+  server_name "";
+  root /dist;
+  charset utf-8;
+  include h5bp/basic.conf;
+  try_files $uri $uri/ index.html;
+}
