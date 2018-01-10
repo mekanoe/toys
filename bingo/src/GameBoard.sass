@@ -1,0 +1,51 @@
+.gb
+  $cellSize: 50px
+  background-color: var(--c-red)
+  display: grid
+  grid-template-columns: $cellSize $cellSize $cellSize $cellSize $cellSize
+  grid-template-rows: $cellSize $cellSize $cellSize $cellSize $cellSize $cellSize
+  grid-gap: 10px
+  width: ($cellSize * 5) + (10px * 4)
+  padding: 10px
+  border: 1px solid var(--c-dark)
+  box-shadow: 0 0 1px hsla(0,0%,0%,0.4)
+
+  &__header
+    color: var(--c-white)
+    font-size: 45px
+    font-weight: 700
+    text-align: center
+
+  &__item
+    display: flex
+    background-color: var(--c-white)
+    color: var(--c-dark)
+    font-size: 35px
+    align-items: center
+    justify-content: center
+    position: relative
+    user-select: none
+    cursor: pointer
+
+    &::after
+      $inset: 3px
+      position: absolute
+      top: $inset
+      right: $inset
+      left: $inset
+      bottom: $inset
+      content: "" //like the inside of my mind
+      background-color: var(--c-cyan)
+      opacity: 0
+      border-radius: 100%
+      transition: opacity 0.15s ease-in-out, transform 0.1s ease-out 0.15s
+      transform: translateZ(0) scale(1.1)
+      box-shadow: inset 2px 0 2px rgba(0,0,0,0.1), inset -2px 0 2px hsla(0,0%,100%,0.2)    
+    
+    &.selected::after
+      opacity: 0.7
+      transform: translateZ(0) scale(1)
+    
+    &[data-value='FREE']
+      font-size: 15px
+      

@@ -1,0 +1,69 @@
+@import './timer.scss'
+
+.cb
+  border: 1px solid var(--c-dark)
+  box-shadow: 0 0 1px hsla(0,0%,0%,0.4)
+  display: flex
+  background-color: var(--c-indigo)
+  
+  &__lightboard
+    display: flex
+    flex-wrap: wrap
+    width: 35px*16
+    padding: 5px
+    border-right: 1px solid var(--c-dark)
+
+    &__item
+      flex: 1 16 calc(100%/16)
+      width: 35px
+      height: 35px
+      display: flex
+      align-items: center
+      justify-content: center
+      background-color: var(--c-white)
+      padding: 3px
+      box-sizing: border-box
+      border-radius: 100%
+      border: 2px solid var(--c-indigo)
+      transition: background-color 0.3s ease-in-out
+
+      &.header
+        background-color: transparent
+        color: var(--c-white)
+        font-weight: 500
+        font-size: 1.3em
+
+      &.called
+        background-color: var(--c-yellow)
+
+  &__recent
+    display: grid
+    grid-template-columns: 35px*5 35px+6px
+    grid-template-rows: 35px*5
+    padding: 10px
+    grid-gap: 10px
+
+    &__current
+      position: relative
+      
+      .text
+        border-radius: 100%
+        display: flex
+        background-color: var(--c-white)
+        align-items: center
+        justify-content: center
+        font-size: 75px
+        position: absolute
+        $inset: 5px
+        top: $inset
+        left: $inset
+        right: $inset
+        bottom: $inset
+        z-index: 1000
+
+      .timer .mask
+        background-color: var(--c-indigo)
+
+@include timer('.timer', 5, 0px, transparent, '6px solid var(--c-cyan)')
+
+

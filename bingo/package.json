@@ -1,0 +1,19 @@
+{
+  "name": "bingo",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "custom-react-scripts": "^0.2.1",
+    "eventemitter3": "^3.0.0",
+    "immutable": "^3.8.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "homepage": "https://toys.kat.cafe/bingo/",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build && rm -rf ./dist && mv ./build ./dist",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
