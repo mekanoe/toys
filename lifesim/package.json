@@ -19,7 +19,8 @@
     "test": "inferno-scripts test --env=jsdom",
     "eject": "inferno-scripts eject",
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive"
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "now-build": "npm run build"
   },
   "homepage": "https://toys.kat.cafe/lifesim/",
   "standard": {
